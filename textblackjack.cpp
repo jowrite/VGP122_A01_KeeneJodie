@@ -82,6 +82,7 @@ int main() {
             // CHECK FOR SPLIT
             if (isPair(playerHand)) {
                 char splitChoice;
+                while (true) {
                 std::cout << "\nDo you want to SPLIT (y/n)? ";
                 std::cin >> splitChoice;
                 splitChoice = tolower(splitChoice);
@@ -149,6 +150,7 @@ int main() {
                             break; // Player can't draw any more cards after doubling down
                         }
                     }
+                }
                     // DEALER TURN AFTER SPLIT
                     std::cout << "\nDealer's turn:\n";
                     displayHand(dealerHand, true);
@@ -360,7 +362,7 @@ int getPlayerBet(int credits) {
         std::cin >> bet;
         if (std::cin.fail() || bet < 1 || bet > credits) {
             std::cout << "Invalid input! Please enter a number between 1 and " << credits << ".\n";
-        std:cin.clear();
+            std::cin.clear();
             std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear & remove invalid input
         }
         else {
