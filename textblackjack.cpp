@@ -336,9 +336,20 @@ int getHandValue(const vector<int>& hand) {
 // GET PLAYER CHOICE
 char getPlayerChoice() {
     char choice;
-    std::cout << "\nDo you want to HIT (h), STAND (s), DOUBLE DOWN (d), or PASS (x)? ";
-    std::cin >> choice;
-    return choice;
+    while (true) {
+        std::cout << "\nDo you want to HIT (h), STAND (s), DOUBLE DOWN (d), or PASS (x)? ";
+        std::cin >> choice;
+        choice = tolower(choice);
+
+        if (choice == 'h' || choice == 's' || choice == 'd' || choice == 'x') {
+            return choice; 
+        }
+            else {
+                std::cout << "Invalid choice. Please enter 'h', 's', 'd', or 'x'.\n";
+                std::cin.clear();
+                std:cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 }
 
 // GET PLAYER BET
