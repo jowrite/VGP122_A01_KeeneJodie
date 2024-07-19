@@ -80,20 +80,23 @@ int main() {
             displayHand(dealerHand, false);
 
             // CHECK FOR SPLIT
+            // CHECK FOR SPLIT
             if (isPair(playerHand)) {
                 char splitChoice;
                 while (true) {
-                std::cout << "\nDo you want to SPLIT (y/n)? ";
-                std::cin >> splitChoice;
-                splitChoice = tolower(splitChoice);
-                if (splitChoice == 'y' || splitChoice == 'n') {
-                    break;
+                    std::cout << "\nDo you want to SPLIT (y/n)? ";
+                    std::cin >> splitChoice;
+                    splitChoice = tolower(splitChoice);
+                    if (splitChoice == 'y' || splitChoice == 'n') {
+                        break;
+                    }
+                    else {
+                        std::cout << "Invalid choice. Please enter 'y' or 'n'.\n";
+                        std::cin.clear();
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    }
                 }
-                else {
-                    std::cout << "Invalid choice. Please enter 'y' or 'n'.\n";
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                }
+
                 if (splitChoice == 'y') {
                     // SPLIT
                     vector<int> secondHand;
@@ -127,6 +130,7 @@ int main() {
                             break; // Player can't draw any more cards after doubling down
                         }
                     }
+
                     std::cout << "\nSecond hand:\n";
                     displayHand(secondHand);
                     while ((choice = getPlayerChoice()) != 's' && choice != 'x') {
@@ -150,39 +154,43 @@ int main() {
                             break; // Player can't draw any more cards after doubling down
                         }
                     }
-                }
+
                     // DEALER TURN AFTER SPLIT
                     std::cout << "\nDealer's turn:\n";
                     displayHand(dealerHand, true);
                     while (getHandValue(dealerHand) < 17) {
                         dealCard(dealerHand, deck);
                         displayHand(dealerHand, true);
-                        if (getHandValue(dealerHand) > 21) {
-                            std::cout << "Dealer busts! YOU WIN.\n";
-                            playerCredits += playerBet;
-                            wins++;
-                            break;
-                        }
                     }
-                    // COMPARE HANDS
-                    int playerValue = getHandValue(playerHand);
-                    int secondValue = getHandValue(secondHand);
-                    if (playerWins(playerValue, getHandValue(dealerHand)) || playerWins(secondValue, getHandValue(dealerHand))) {
-                        std::cout << "You win!\n";
+
+                    int dealerValue = getHandValue(dealerHand);
+                    if (dealerValue > 21) {
+                        std::cout << "Dealer busts! YOU WIN.\n";
                         playerCredits += playerBet;
                         wins++;
                     }
-                    else if (dealerWins(playerValue, getHandValue(dealerHand)) || dealerWins(secondValue, getHandValue(dealerHand))) {
-                        std::cout << "Dealer wins!\n";
-                        playerCredits -= playerBet;
-                        losses++;
-                    }
                     else {
-                        std::cout << "It's a tie!\n";
+                        // COMPARE HANDS
+                        int playerValue = getHandValue(playerHand);
+                        int secondValue = getHandValue(secondHand);
+                        if (playerWins(playerValue, dealerValue) || playerWins(secondValue, dealerValue)) {
+                            std::cout << "You win!\n";
+                            playerCredits += playerBet;
+                            wins++;
+                        }
+                        else if (dealerWins(playerValue, dealerValue) || dealerWins(secondValue, dealerValue)) {
+                            std::cout << "Dealer wins!\n";
+                            playerCredits -= playerBet;
+                            losses++;
+                        }
+                        else {
+                            std::cout << "It's a tie!\n";
+                        }
                     }
                     continue;
                 }
             }
+
 
             // PLAYER REGULAR TURN
             char choice;
@@ -362,7 +370,7 @@ int getPlayerBet(int credits) {
         std::cin >> bet;
         if (std::cin.fail() || bet < 1 || bet > credits) {
             std::cout << "Invalid input! Please enter a number between 1 and " << credits << ".\n";
-            std::cin.clear();
+        std::cin.clear();
             std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear & remove invalid input
         }
         else {
