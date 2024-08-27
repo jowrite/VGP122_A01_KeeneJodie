@@ -1,3 +1,6 @@
+#include "blackjack.h"
+
+using namespace std;
 
 // SHUFFLE DECK
 void shuffleDeck(vector<int>& deck) {
@@ -24,33 +27,33 @@ void displayHand(const vector<int>& hand, bool showFirstCard) {
             int card = hand[i] % 13 + 1;
             switch (card) {
             case A:
-                std::cout << "A of ";
+                cout << "A of ";
                 break;
             case J:
-                std::cout << "J of ";
+                cout << "J of ";
                 break;
             case Q:
-                std::cout << "Q of ";
+                cout << "Q of ";
                 break;
             case K:
-                std::cout << "K of ";
+                cout << "K of ";
                 break;
             default:
-                std::cout << card << " of ";
+                cout << card << " of ";
                 break;
             }
             switch ((hand[i] - 1) / 13) {
             case 0:
-                std::cout << "Hearts\n";
+                cout << "Hearts\n";
                 break;
             case 1:
-                std::cout << "Diamonds\n";
+                cout << "Diamonds\n";
                 break;
             case 2:
-                std::cout << "Clubs\n";
+                cout << "Clubs\n";
                 break;
             case 3:
-                std::cout << "Spades\n";
+                cout << "Spades\n";
                 break;
             }
         }
@@ -83,17 +86,17 @@ int getHandValue(const vector<int>& hand) {
 char getPlayerChoice() {
     char choice;
     while (true) {
-        std::cout << "\nDo you want to HIT (h), STAND (s), DOUBLE DOWN (d), or PASS (x)? ";
-        std::cin >> choice;
+        cout << "\nDo you want to HIT (h), STAND (s), DOUBLE DOWN (d), or PASS (x)? ";
+        cin >> choice;
         choice = tolower(choice);
 
         if (choice == 'h' || choice == 's' || choice == 'd' || choice == 'x') {
             return choice;
         }
         else {
-            std::cout << "Invalid choice. Please enter 'h', 's', 'd', or 'x'.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Invalid choice. Please enter 'h', 's', 'd', or 'x'.\n";
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }
@@ -102,18 +105,18 @@ char getPlayerChoice() {
 int getPlayerBet(int credits) {
     int bet;
     while (true) {
-        std::cout << "\nEnter your bet (1-" << credits << "): ";
-        std::cin >> bet;
-        if (std::cin.fail() || bet < 1 || bet > credits) {
-            std::cout << "Invalid input! Please enter a number between 1 and " << credits << ".\n";
-            std::cin.clear();
-            std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear & remove invalid input
+        cout << "\nEnter your bet (1-" << credits << "): ";
+        cin >> bet;
+        if (cin.fail() || bet < 1 || bet > credits) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear & remove invalid input
+            cout << "Invalid input! Please enter a number between 1 and " << credits << ".\n";
         }
         else {
-            break;
+            return bet;
         }
     }
-    return bet;
+    
 }
 
 // PLAYER WINS
@@ -128,20 +131,22 @@ bool dealerWins(int playerValue, int dealerValue) {
 
 // CHECK FOR PAIR
 bool isPair(const vector<int>& hand) {
-    return hand.size() == 2 && (hand[0] % 13 == hand[1] % 13);
+    if (hand.size() == 2) {
+        return (hand[0] % 13 == hand[1] % 13);
+    }
+    return false;
 }
 
 // PLAY AGAIN
 bool playAgain() {
     char choice;
-    std::cout << "\nDo you want to play again? (y/n): ";
-    std::cin >> choice;
+    cout << "\nDo you want to play again? (y/n): ";
+    cin >> choice;
     return choice == 'y';
 }
 
 // DISPLAY STATS
 void getStats(int wins, int losses) {
-    std::cout << "WINS: " << wins << "\n";
-    std::cout << "LOSSES: " << losses << "\n\n";
+    cout << "WINS: " << wins << " | LOSSES: " << losses << endl;
 }
 
